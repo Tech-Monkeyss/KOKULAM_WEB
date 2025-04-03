@@ -46,6 +46,7 @@ app.post("/upload", upload.single("product"), (req, res) => {
 });
 
 
+// cart backend implementation
 
 //end point of cart
 app.post("/addOrder", fetchUser, async (req, res) => {
