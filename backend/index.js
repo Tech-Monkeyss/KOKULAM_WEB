@@ -175,6 +175,37 @@ app.get("/me", fetchUser, async (req, res) => {
     res.status(500).json({ success: false, error: "Server Error" });
   }
 });
+//end point for wish
+app.post("/addtowish", fetchUser, async (req, res) => {
+  console.log("Added", req.body.itemId);
+  let userData = await Users.findOne({ _id: req.user.id });
+
+  userData.wishData[req.body.itemId] = 1;
+  await Users.findByIdAndUpdate(
+    { _id: req.user.id },
+    { wishData: userData.wishData }
+  );
+  res.send("Added");
+});
+///remove from wish end point
+app.post("/removefromwish", fetchUser, async (req, res) => {
+  console.log("Removed", req.body.itemId);
+  let userData = await Users.findOne({ _id: req.user.id });
+
+  if (userData.wishData[req.body.itemId] > 0)
+    userData.wishData[req.body.itemId] -= 1;
+  await Users.findByIdAndUpdate(
+    { _id: req.user.id },
+    { wishData: userData.wishData }
+  );
+  res.send("Removed");
+});
+// end point of wish
+app.post("/getwish", fetchUser, async (req, res) => {
+  console.log("Get Wish");
+  let userData = await Users.findOne({ _id: req.user.id });
+  res.json(userData.wishData);
+});
 //  endpoint for deactivating user account and logging out
 app.delete("/deleteUser", fetchUser, async (req, res) => {
   try {
